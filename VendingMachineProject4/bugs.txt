@@ -1,0 +1,3 @@
+VendingMachineItem can be assigned a null value for its name
+balance can be directly accessed
+addItem can be passed a null value for the item

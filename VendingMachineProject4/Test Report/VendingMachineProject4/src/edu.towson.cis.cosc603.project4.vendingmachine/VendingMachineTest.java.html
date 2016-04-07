@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>VendingMachineTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">VendingMachineProject4 (Apr 6, 2016 3:11:39 PM)</a> &gt; <a href="../../index.html" class="el_group">VendingMachineProject4</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">edu.towson.cis.cosc603.project4.vendingmachine</a> &gt; <span class="el_source">VendingMachineTest.java</span></div><h1>VendingMachineTest.java</h1><pre class="source lang-java linenums">package edu.towson.cis.cosc603.project4.vendingmachine;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+<span class="fc" id="L9">public class VendingMachineTest {</span>
+	/** Declaring necessary test objects for {@link VendingMachine} */
+	private VendingMachine vendingMachine1,vendingMachine2;
+	private VendingMachineItem item;
+<span class="fc" id="L13">	private static final String[] code = {&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;};</span>
+<span class="fc" id="L14">	private static final double amount[] = {0,1,100000},</span>
+<span class="fc" id="L15">								threshold = 0.00001;</span>
+	
+	/**
+	 * Initializes the necessary test objects for the test cases to use.
+	 *
+	 */
+	@Before
+	public void setUp() {
+<span class="fc" id="L23">		item = new VendingMachineItem(code[0],amount[1]);</span>
+<span class="fc" id="L24">		vendingMachine1 = new VendingMachine();</span>
+<span class="fc" id="L25">		vendingMachine2 = new VendingMachine();</span>
+<span class="fc" id="L26">		vendingMachine2.addItem(item, code[0]);</span>
+<span class="fc" id="L27">		vendingMachine2.insertMoney(amount[1]);</span>
+<span class="fc" id="L28">	}</span>
+
+	/**
+	 * Test for the addItem() method of the {@link VendingMachine} class.
+	 * Tests postcondition
+	 */
+	@Test
+	public void testAddItem() {
+<span class="fc" id="L36">		vendingMachine1.addItem(item, code[0]);</span>
+<span class="fc" id="L37">		assertEquals(code[0],vendingMachine1.getItem(code[0]).getName());</span>
+<span class="fc" id="L38">		vendingMachine1.addItem(item, code[1]);</span>
+<span class="fc" id="L39">		assertEquals(code[0],vendingMachine1.getItem(code[1]).getName());</span>
+<span class="fc" id="L40">		vendingMachine1.addItem(item, code[2]);</span>
+<span class="fc" id="L41">		assertEquals(code[0],vendingMachine1.getItem(code[2]).getName());</span>
+<span class="fc" id="L42">		vendingMachine1.addItem(item, code[3]);</span>
+<span class="fc" id="L43">		assertEquals(code[0],vendingMachine1.getItem(code[3]).getName());</span>
+<span class="fc" id="L44">	}</span>
+	
+	/**
+	 * Test for the addItem() method of the {@link VendingMachine} class.
+	 * Tests null item
+	 * @throws VendingMachineException
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testNullAddItem() {
+<span class="nc" id="L53">		vendingMachine1.addItem(null, code[0]);</span>
+<span class="nc" id="L54">	}</span>
+
+	/**
+	 * Test for the addItem() method of the {@link VendingMachine} class.
+	 * Tests exception for duplicate entry at the same itemslot
+	 * @throws VendingMachineException
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testDuplicateSlotAddItem() {
+<span class="fc" id="L63">		vendingMachine1.addItem( item, code[0]);</span>
+<span class="nc" id="L64">		vendingMachine1.addItem( item, code[0]);</span>
+<span class="nc" id="L65">	}</span>
+	
+	/**
+	 * Test for the addItem() method of the {@link VendingMachine} class.
+	 * tests name checker
+	 * @throws VendingMachineException
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testWrongNameAddItem() {
+<span class="nc" id="L74">		vendingMachine1.addItem(item, &quot;&quot;);</span>
+<span class="nc" id="L75">	}</span>
+	
+	/**
+	 * Test for the addItem() method of the {@link VendingMachine} class.
+	 * tests null for the item name
+	 * @throws NullPointerException
+	 */
+	@Test(expected = NullPointerException.class)
+	public void testNullNameAddItem() {
+<span class="nc" id="L84">		vendingMachine1.addItem(item, null);</span>
+<span class="nc" id="L85">	}</span>
+
+	
+	/**
+	 * Test for the removeItem() method of the {@link VendingMachine} class.
+	 * tests postcondition
+	 */
+	@Test
+	public void testRemoveItem() {
+<span class="fc" id="L94">		vendingMachine1.addItem( item, code[0]);</span>
+<span class="fc" id="L95">		vendingMachine1.removeItem(code[0]);</span>
+<span class="fc" id="L96">		assertNull(vendingMachine1.getItem(code[0]));</span>
+<span class="fc" id="L97">	}</span>
+	
+	/**
+	 * Test for the removeItem() method of the {@link VendingMachine} class.
+	 * tests return
+	 */
+	@Test
+	public void testReturnRemoveItem() {
+<span class="fc" id="L105">		vendingMachine1.addItem( item, code[0]);</span>
+<span class="fc" id="L106">		vendingMachine1.addItem(vendingMachine1.removeItem(code[0]), code[0]);</span>
+<span class="fc" id="L107">		assertEquals(code[0],vendingMachine1.getItem(code[0]).getName());</span>
+<span class="fc" id="L108">	}</span>
+	
+	/**
+	 * Test for the removeItem() method of the {@link VendingMachine} class.
+	 * tests removing an item that doesn't exist
+	 * @throws VendingMachineException
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testNullRemoveItem() {
+<span class="nc" id="L117">		vendingMachine1.removeItem(code[0]);</span>
+<span class="nc" id="L118">	}</span>
+
+	/**
+	 * Test for the insertMoney() method of the {@link VendingMachine} class.
+	 * tests postcondition. 
+	 * precondition is covered in the getBalance precondition test 
+	 */
+	@Test
+	public void testPostconditionInsertMoney() {
+<span class="fc" id="L127">		vendingMachine1.insertMoney(amount[0]);</span>
+<span class="fc" id="L128">		assertEquals(amount[0],vendingMachine1.getBalance(),threshold);</span>
+<span class="fc" id="L129">		vendingMachine1.insertMoney(amount[1]);</span>
+<span class="fc" id="L130">		assertEquals(amount[1],vendingMachine1.getBalance(),threshold);</span>
+<span class="fc" id="L131">		vendingMachine1.insertMoney(amount[2]);</span>
+<span class="fc" id="L132">		assertEquals(amount[2]+amount[1],vendingMachine1.getBalance(),threshold);</span>
+<span class="fc" id="L133">	}	</span>
+	
+	/**
+	 * Test for the insertMoney() method of the {@link VendingMachine} class.
+	 * tests for amount &lt; 0
+	 * @throws VendingMachineException
+	 */
+	@Test(expected = VendingMachineException.class)
+	public void testBreakInsertMoney() {
+<span class="nc" id="L142">		vendingMachine1.insertMoney(-1);</span>
+<span class="nc" id="L143">	}</span>
+	
+	/**
+	 * Test for the getBalance() method of the {@link VendingMachine} class.
+	 * tests precondition
+	 */
+	@Test
+	public void testPreconditionGetBalance() {
+<span class="fc" id="L151">		assertEquals(0,vendingMachine1.getBalance(),threshold);</span>
+<span class="fc" id="L152">	}</span>
+	
+	/**
+	 * Test for the getBalance() method of the {@link VendingMachine} class.
+	 * tests postcondition
+	 */
+	@Test
+	public void testPostconditionGetBalance() {
+<span class="fc" id="L160">		vendingMachine1.getBalance();</span>
+<span class="fc" id="L161">		assertEquals(0,vendingMachine1.getBalance(),threshold);</span>
+<span class="fc" id="L162">	}</span>
+	/**
+	 * Test for the getBalance() method of the {@link VendingMachine} class.
+	 * tests for calling insertMoney
+	 */
+	@Test
+	public void testGetBalance() {
+<span class="fc" id="L169">		vendingMachine1.getBalance();</span>
+<span class="fc" id="L170">		vendingMachine1.insertMoney(amount[2]);</span>
+<span class="fc" id="L171">		assertEquals(amount[2],vendingMachine1.getBalance(),threshold);</span>
+<span class="fc" id="L172">	}</span>
+	
+	/**
+	 * Test for the makePurchase() method of the {@link VendingMachine} class.
+	 * tests postcondition
+	 */
+	@Test
+	public void testPostconditionMakePurchase() {
+<span class="fc" id="L180">		vendingMachine2.makePurchase(code[0]);</span>
+<span class="fc" id="L181">		assertEquals(amount[0],vendingMachine2.getBalance(),threshold);</span>
+<span class="fc" id="L182">	}</span>
+	
+	/**
+	 * Test for the makePurchase() method of the {@link VendingMachine} class.
+	 * tests the return value
+	 */
+	@Test
+	public void testReturnMakePurchase() {
+<span class="fc" id="L190">		assertFalse(vendingMachine1.makePurchase(code[0]));</span>
+<span class="fc" id="L191">		assertTrue(vendingMachine2.makePurchase(code[0]));</span>
+<span class="fc" id="L192">		assertFalse(vendingMachine2.makePurchase(code[0]));</span>
+<span class="fc" id="L193">		vendingMachine2.addItem(item, code[0]);</span>
+<span class="fc" id="L194">		assertFalse(vendingMachine2.makePurchase(code[0]));</span>
+<span class="fc" id="L195">	}</span>
+	
+	/**
+	 * Test for the returnChange() method of the {@link VendingMachine} class.
+	 * tests postcondition
+	 */
+	@Test
+	public void testReturnChange() {
+<span class="fc" id="L203">		assertEquals(amount[0],vendingMachine1.returnChange(),threshold);</span>
+<span class="fc" id="L204">		assertEquals(amount[0],vendingMachine1.getBalance(),threshold);</span>
+<span class="fc" id="L205">		assertEquals(amount[1],vendingMachine2.returnChange(),threshold);</span>
+<span class="fc" id="L206">		assertEquals(amount[0],vendingMachine2.getBalance(),threshold);</span>
+<span class="fc" id="L207">	}</span>
+	
+	/**
+	 * Cleans up test objects after a test case is executed.
+	 */
+	@After
+	public void tearDown(){
+<span class="fc" id="L214">		item = null;</span>
+<span class="fc" id="L215">		vendingMachine1 = null;</span>
+<span class="fc" id="L216">		vendingMachine2 = null;</span>
+<span class="fc" id="L217">	}</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span>VendingMachineProject4 (Apr 6, 2016 3:11:39 PM)</div></body></html>
